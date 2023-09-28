@@ -2,6 +2,7 @@ TEMPLATE = app
 TARGET = dialcontrol
 
 QT += quick qml
+CONFIG += c++11
 
 SOURCES += main.cpp \
     fullflex.cpp

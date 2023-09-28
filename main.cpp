@@ -8,38 +8,56 @@
 
 int main(int argc, char *argv[])
 {
-     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-     QCoreApplication::setOrganizationName("Qt_GTM_FullFlex");
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setOrganizationName("Qt_GTM_FullFlex");
 
-     QGuiApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
 
-     qmlRegisterType<Fullflex>("dev.coskunergan.fullflex",1,0,"Fullflex");
+    qmlRegisterType<Fullflex>("coskunergan.dev.fullflex", 1, 0, "Fullflex");
 
-     QQmlApplicationEngine engine;
-     engine.load(QUrl(QStringLiteral("qrc:/dialcontrol.qml")));
+    QQmlApplicationEngine engine;
+    engine.load(QUrl(QStringLiteral("qrc:/dialcontrol.qml")));
 
-     QObject *object = engine.rootObjects()[0];
-     QObject *fullflex = object->findChild<QObject*>("FullFlexDial");
+    //QObject *object = engine.rootObjects()[0];
+    //QObject *fullflex = object->findChild<QObject*>("FullFlexDial");
 
-     Fullflex *ptrFullflex = qobject_cast<Fullflex*>(fullflex);
+    QQuickView view;
+    view.connect(view.engine(), &QQmlEngine::quit, &app, &QCoreApplication::quit);
+    view.setSource(QUrl("qrc:/dialcontrol.qml"));
+    if(view.status() == QQuickView::Error)
+    {
+        return -1;
+    }
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    view.show();
 
-     QTimer timer;
 
-      //ptrFullflex->setWidthA(512);
-     QObject::connect(&timer, &QTimer::timeout, [&]()
-       {
-         //ptrFullflex->setWidthA(512);
-       }
-       );
+    QQuickItem *item = view.rootObject()->findChild<QQuickItem *>("FullFlexDial");
+    //if (item)
+    item->setProperty("color", QColor(Qt::yellow));
 
-      timer.start(100);
+    QQuickItem *slider = view.rootObject()->findChild<QQuickItem *>("FullFlexSlider");
 
-     QQuickView view;
-     view.connect(view.engine(), &QQmlEngine::quit, &app, &QCoreApplication::quit);
-     view.setSource(QUrl("qrc:/dialcontrol.qml"));
-     if (view.status() == QQuickView::Error)
-         return -1;
-     view.setResizeMode(QQuickView::SizeRootObjectToView);
-     view.show();
-     return app.exec();
+    QTimer timer;
+
+    QObject::connect(&timer, &QTimer::timeout, [&]()
+    {
+        //ptrFullflex->setWidthA(512);
+        //ptrFullflex->setWidthA(512);
+        if(item->width() != 512)
+        {
+            item->setWidth(512);
+        }
+        else
+        {
+            item->setHeight(412);
+        }
+
+        item->setWidth(slider->x());
+    }
+                    );
+
+    timer.start(10);
+
+    return app.exec();
 }
