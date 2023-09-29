@@ -51,37 +51,84 @@
 //! [imports]
 import QtQuick 2.0
 import QtQuick.Window 2.2
-//import coskunergan.dev.fullflex 1.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import "content"
-
 //! [imports]
 
 //! [0]
 Rectangle {
     //id: rectangle
+    objectName: "Root"
+    id: root
     visible: true
     width: 640
     height: 480
     color: "#545454"    
-    //visibility:  "FullScreen"    
+    //visibility:  "FullScreen"
+    //value: slider.x * 100 / (container.width - 32)
+    property int select: 0
+    property real value2 : slider.x * 100 / (container.width - 32)
 
-    //! [the dial in use]
-    // Dial with a slider to adjust it
     Dial {
-        objectName: "FullFlexDial"
-        id: dial        
+        objectName: "Dial1"
+        id: dial1
         signal sendMessage(string msg)
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        width: 212
-        height: 195
+        width: -200
+        height: 100
         opacity: 1.0
-        scale: 1
-        value: slider.x * 100 / (container.width - 32)
+        value : (msg.author() == 3) ? value2 : value;
     }
-    //! [the dial in use]
+
+    Dial {
+        objectName: "Dial2"
+        id: dial2
+        signal sendMessage(string msg)
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 200
+        height:100
+        opacity: 1.0
+        value : (select == 2) ? value2 : value;
+    }
+
+    Dial {
+        objectName: "Dial3"
+        id: dial3
+        signal sendMessage(string msg)
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 650
+        height: 100
+        opacity: 1.0
+        value : (select == 3) ? value2 : value;
+    }
+
+    Dial {
+        objectName: "Dial4"
+        id: dial4
+        signal sendMessage(string msg)
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 100
+        height: 480
+        opacity: 1.0
+        value : (select == 4) ? value2 : value;
+    }
+
+    Dial {
+        objectName: "Dial5"
+        id: dial5
+        signal sendMessage(string msg)
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 512
+        height: 480
+        opacity: 1.0
+        value : (select == 5) ? value2 : value;
+    }
 
     Rectangle {
         id: container

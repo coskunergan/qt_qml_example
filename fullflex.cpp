@@ -2,12 +2,19 @@
 #include <QDebug>
 #include "fullflex.h"
 
-Fullflex::Fullflex(QObject *parent) :
-    QObject(parent)
+extern int select_pan;
+
+PanClass::PanClass(int pan, QObject *parent) :
+    QObject(parent),
+    m_pan(pan)
 {
 }
 
-void Fullflex::msgSlot(const QString &str)
+void PanClass::msgSlot(const QString &str)
 {
-    qDebug() << " test string msg = " << str;
+    qDebug() << " PAN: " << m_pan << " ";
+
+    select_pan = m_pan;
+
+    qDebug() << str;
 }

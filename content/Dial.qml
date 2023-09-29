@@ -54,15 +54,16 @@ import QtQuick.Controls 1.2
 Item {
     id: root
     property real value : 0
-
     width: 210; height: 210
+    scale: clickMouse.pressed ? 0.98 : 1.0
 
     Image {
-        source: "background.png"
+        source: "background.png"        
         MouseArea {
             id: clickMouse
             anchors.fill: parent
-            onClicked: dial.sendMessage("send qml")
+            anchors.margins: 10
+            onClicked: root.sendMessage("click pan")
         }
     }
 
@@ -86,6 +87,7 @@ Item {
         x: 98; y: 33
         antialiasing: true
         source: "needle.png"
+        scale: clickMouse.pressed ? 0.55 : 1.0
         transform: Rotation {
             id: needleRotation
             origin.x: 5; origin.y: 65
