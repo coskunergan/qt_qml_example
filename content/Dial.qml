@@ -49,6 +49,7 @@
 ****************************************************************************/
 
 import QtQuick 2.0
+import QtQuick.Controls 1.2
 
 Item {
     id: root
@@ -56,7 +57,14 @@ Item {
 
     width: 210; height: 210
 
-    Image { source: "background.png" }
+    Image {
+        source: "background.png"
+        MouseArea {
+            id: clickMouse
+            anchors.fill: parent
+            onClicked: dial.sendMessage("send qml")
+        }
+    }
 
 //! [needle_shadow]
     Image {

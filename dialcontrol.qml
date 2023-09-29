@@ -49,13 +49,13 @@
 ****************************************************************************/
 
 //! [imports]
-import QtQuick 2.9
+import QtQuick 2.0
 import QtQuick.Window 2.2
-import coskunergan.dev.fullflex 1.0
-import QtQuick.Controls 2.0
+//import coskunergan.dev.fullflex 1.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import "content"
+
 //! [imports]
 
 //! [0]
@@ -64,17 +64,18 @@ Rectangle {
     visible: true
     width: 640
     height: 480
-    color: "#545454"
-    //visibility:  "FullScreen"
+    color: "#545454"    
+    //visibility:  "FullScreen"    
 
     //! [the dial in use]
     // Dial with a slider to adjust it
     Dial {
         objectName: "FullFlexDial"
-        id: dial
+        id: dial        
+        signal sendMessage(string msg)
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        width: widthFullflex
+        width: 212
         height: 195
         opacity: 1.0
         scale: 1

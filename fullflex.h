@@ -2,26 +2,13 @@
 #define FULLFLEX_H
 
 #include <QObject>
-#include <QQuickPaintedItem>
 
-class Fullflex : public QQuickPaintedItem
+class Fullflex : public QObject
 {
     Q_OBJECT
-
-    Q_PROPERTY(qreal widthFullflex WRITE setWidthA NOTIFY WidthAChanged)
-
 public:
-    Fullflex(QQuickItem *parent = 0);
-    virtual void paint(QPainter *painter);
-
-    void setWidthA(qreal x);
-
-signals:
-    void WidthAChanged();
-
-private:
-    qreal m_widthA;
-
+    explicit Fullflex(QObject *parent = 0);
+public slots:
+    void msgSlot(const QString &str);
 };
-
 #endif // FULLFLEX_H
