@@ -16,25 +16,4 @@ private:
 
 };
 
-
-class Message : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(int author READ author WRITE setAuthor NOTIFY authorChanged)
-public:
-    void setAuthor(const int &a) {
-        if (a != m_author) {
-            m_author = a;
-            emit authorChanged();
-        }
-    }
-    int author() {
-        return m_author;
-    }
-signals:
-    void authorChanged();
-private:
-    int m_author;
-};
-
 #endif // FULLFLEX_H

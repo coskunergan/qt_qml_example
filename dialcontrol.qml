@@ -49,10 +49,10 @@
 ****************************************************************************/
 
 //! [imports]
-import QtQuick 2.0
-import QtQuick.Window 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Layouts 1.1
+import QtQuick 2.15
+import QtQuick.Window 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import "content"
 //! [imports]
 
@@ -67,8 +67,14 @@ Rectangle {
     color: "#545454"    
     //visibility:  "FullScreen"
     //value: slider.x * 100 / (container.width - 32)
-    property int select: 0
-    property real value2 : slider.x * 100 / (container.width - 32)
+    property int slider_update:0
+    property bool isUpdate: true
+    property int slider_value: slider.x * 100 / (container.width - 32)
+    property real dial1_value : 0
+    property real dial2_value : 0
+    property real dial3_value : 0
+    property real dial4_value : 0
+    property real dial5_value : 0
 
     Dial {
         objectName: "Dial1"
@@ -79,7 +85,7 @@ Rectangle {
         width: -200
         height: 100
         opacity: 1.0
-        value : (msg.author() == 3) ? value2 : value;
+        value : dial1_value
     }
 
     Dial {
@@ -91,7 +97,7 @@ Rectangle {
         width: 200
         height:100
         opacity: 1.0
-        value : (select == 2) ? value2 : value;
+        value : dial2_value
     }
 
     Dial {
@@ -103,7 +109,7 @@ Rectangle {
         width: 650
         height: 100
         opacity: 1.0
-        value : (select == 3) ? value2 : value;
+        value : dial3_value
     }
 
     Dial {
@@ -115,7 +121,7 @@ Rectangle {
         width: 100
         height: 480
         opacity: 1.0
-        value : (select == 4) ? value2 : value;
+        value : dial4_value
     }
 
     Dial {
@@ -127,7 +133,7 @@ Rectangle {
         width: 512
         height: 480
         opacity: 1.0
-        value : (select == 5) ? value2 : value;
+        value : dial5_value
     }
 
     Rectangle {
@@ -138,7 +144,7 @@ Rectangle {
             right: parent.right; leftMargin: 20; rightMargin: 20
             bottomMargin: 10
         }
-        height: 16
+        height: 40
         radius: 8
         opacity: 0.7
         antialiasing: true
@@ -147,21 +153,20 @@ Rectangle {
             GradientStop { position: 1.0; color: "white" }
         }
 
-        //onWidthChanged: {
-            //if (oldWidth === 0) {
-            //    oldWidth = width;
-               // return
-            //}
+       onWidthChanged: {
+            if (oldWidth === 0) {
+                oldWidth = width;
+                return
+            }
 
-            //var desiredPercent = slider.x * 100 / (oldWidth - 32)
-            //slider.x = desiredPercent * (width - 32) / 100
-            //oldWidth = width
-        //}
-
+            var desiredPercent = slider.x * 100 / (oldWidth - 32)
+            slider.x = desiredPercent * (width - 32) / 100
+            oldWidth = width
+        }
         Rectangle {
             id: slider
             objectName: "FullFlexSlider"
-            x: 1; y: 1; width: 30; height: 14
+            x: 1; y: 1; width: 30; height: 38
             radius: 6
             antialiasing: true
             gradient: Gradient {
@@ -175,6 +180,12 @@ Rectangle {
                 drag.target: parent; drag.axis: Drag.XAxis
                 drag.minimumX: 2; drag.maximumX: container.width - 32
             }
+        }
+    }    
+    Connections {
+        target: targetItem
+        onIsUpdateChanged: {
+           slider.x = slider_value * (container.width - 32) / 100
         }
     }
     QuitButton {
