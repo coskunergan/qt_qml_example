@@ -67,8 +67,7 @@ Rectangle {
     color: "#545454"    
     //visibility:  "FullScreen"
     //value: slider.x * 100 / (container.width - 32)
-    property int slider_update:0
-    property bool isUpdate: true
+    property int isUpdate: 0
     property int slider_value: slider.x * 100 / (container.width - 32)
     property real dial1_value : 0
     property real dial2_value : 0
@@ -138,7 +137,7 @@ Rectangle {
 
     Rectangle {
         id: container
-        objectName: "FullFlexContainer"
+        objectName: "Slider"
         property int oldWidth: 0
         anchors { bottom: parent.bottom; left: parent.left
             right: parent.right; leftMargin: 20; rightMargin: 20

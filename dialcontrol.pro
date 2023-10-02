@@ -1,3 +1,8 @@
+QT += serialbus widgets
+requires(qtConfig(combobox))
+
+qtConfig(modbus-serialport): QT += serialport
+
 TEMPLATE = app
 TARGET = dialcontrol
 

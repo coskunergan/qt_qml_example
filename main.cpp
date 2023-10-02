@@ -9,8 +9,27 @@
 #include <QQmlComponent>
 #include <QQmlProperty>
 #include <QTimer>
+#include <QModbusServer>
+#include <QModbusRtuSerialSlave>
+#include <QSerialPort>
 
 int select_pan = 0;
+quint16 dial1_x;
+quint16 dial1_y;
+quint16 dial2_x;
+quint16 dial2_y;
+quint16 dial3_x;
+quint16 dial3_y;
+quint16 dial4_x;
+quint16 dial4_y;
+quint16 dial5_x;
+quint16 dial5_y;
+quint16 dial1_state;
+quint16 dial2_state;
+quint16 dial3_state;
+quint16 dial4_state;
+quint16 dial5_state;
+QModbusServer *modbusDevice = nullptr;
 
 int main(int argc, char *argv[])
 {
@@ -31,15 +50,23 @@ int main(int argc, char *argv[])
     QQuickItem *item3 = view.rootObject()->findChild<QQuickItem *>("Dial3");
     QQuickItem *item4 = view.rootObject()->findChild<QQuickItem *>("Dial4");
     QQuickItem *item5 = view.rootObject()->findChild<QQuickItem *>("Dial5");
-    QQuickItem *slider = view.rootObject()->findChild<QQuickItem *>("FullFlexSlider");
+    QQuickItem *slider = view.rootObject()->findChild<QQuickItem *>("Slider");
 
-
+    int timeout_count = 0;
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, [&]()
     {
-        static int m_select_pan = 0;
+        static int m_select_pan = 1;
+        if(timeout_count)
+        {
+            if(--timeout_count == 0)
+            {
+                select_pan = 0;
+            }
+        }
         if(select_pan != m_select_pan)
         {
+            timeout_count = 30; // ~3sn
             view.rootObject()->setProperty("slider_update", select_pan);
             view.rootObject()->setProperty("update_slider", 123);
             switch(select_pan)
@@ -63,8 +90,16 @@ int main(int argc, char *argv[])
                     break;
 
             }
-            view.rootObject()->setProperty("isUpdate", !(view.rootObject()->property("isUpdate").toBool()));
+            view.rootObject()->setProperty("isUpdate", select_pan);
             m_select_pan = select_pan;
+            if(select_pan)
+            {
+                slider->setVisible(dial1_state | dial2_state | dial3_state | dial4_state | dial5_state);
+            }
+            else
+            {
+                slider->setVisible(false);
+            }
         }
         switch(select_pan)
         {
@@ -87,6 +122,43 @@ int main(int argc, char *argv[])
                 break;
 
         }
+        //----------- MODBUS --------------
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(0), &dial1_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(1), &dial1_y);
+        item1->setWidth(640 - (dial1_x * 850) / 100);
+        item1->setHeight(480 - (dial1_y * 480) / 100);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(2), &dial2_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(3), &dial2_y);
+        item2->setWidth(640 - (dial2_x * 850) / 100);
+        item2->setHeight(480 - (dial2_y * 480) / 100);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(4), &dial3_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(5), &dial3_y);
+        item3->setWidth(640 - (dial3_x * 850) / 100);
+        item3->setHeight(480 - (dial3_y * 480) / 100);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(6), &dial4_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(7), &dial4_y);
+        item4->setWidth(640 - (dial4_x * 850) / 100);
+        item4->setHeight(480 - (dial4_y * 480) / 100);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(8), &dial5_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(9), &dial5_y);
+        item5->setWidth(640 - (dial5_x * 850) / 100);
+        item5->setHeight(480 - (dial5_y * 480) / 100);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(10), view.rootObject()->property("dial1_value").toInt());
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(11), view.rootObject()->property("dial2_value").toInt());
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(12), view.rootObject()->property("dial3_value").toInt());
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(13), view.rootObject()->property("dial4_value").toInt());
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(14), view.rootObject()->property("dial5_value").toInt());
+
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(15), &dial1_state);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(16), &dial2_state);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(17), &dial3_state);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(18), &dial4_state);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(19), &dial5_state);
+        item1->setVisible(dial1_state);
+        item2->setVisible(dial2_state);
+        item3->setVisible(dial3_state);
+        item4->setVisible(dial4_state);
+        item5->setVisible(dial5_state);
     }
                     );
 
@@ -103,9 +175,45 @@ int main(int argc, char *argv[])
     PanClass PanE(5);
     QObject::connect(item5, SIGNAL(sendMessage(QString)), &PanE, SLOT(msgSlot(QString)));
 
-    //Worker worker;// = new Worker();
-    //QObject* obj = view.rootObject();
-    //QObject::connect(worker, SIGNAL(update_slider(QVariant)), obj, SLOT(update_slider(QVariant)));
+    modbusDevice = new QModbusRtuSerialSlave();
+
+    QModbusDataUnitMap reg;
+    //reg.insert(QModbusDataUnit::Coils, { QModbusDataUnit::Coils, 0, 10 });
+    //reg.insert(QModbusDataUnit::DiscreteInputs, { QModbusDataUnit::DiscreteInputs, 0, 10 });
+    reg.insert(QModbusDataUnit::HoldingRegisters, { QModbusDataUnit::HoldingRegisters, 0, 20 });
+    //reg.insert(QModbusDataUnit::InputRegisters, { QModbusDataUnit::InputRegisters, 0, 10 });
+
+    modbusDevice->setMap(reg);
+
+    /*connect(modbusDevice, &QModbusServer::dataWritten,
+            this, &MainWindow::updateWidgets);
+    connect(modbusDevice, &QModbusServer::stateChanged,
+            this, &MainWindow::onStateChanged);
+    connect(modbusDevice, &QModbusServer::errorOccurred,
+            this, &MainWindow::handleDeviceError);
+
+    connect(ui->listenOnlyBox, &QCheckBox::toggled, this, [this](bool toggled) {
+        if (modbusDevice)
+            modbusDevice->setValue(QModbusServer::ListenOnlyMode, toggled);
+    });
+    emit ui->listenOnlyBox->toggled(ui->listenOnlyBox->isChecked());
+    connect(ui->setBusyBox, &QCheckBox::toggled, this, [this](bool toggled) {
+        if (modbusDevice)
+            modbusDevice->setValue(QModbusServer::DeviceBusy, toggled ? 0xffff : 0x0000);
+    });
+    emit ui->setBusyBox->toggled(ui->setBusyBox->isChecked());
+    */
+
+    modbusDevice->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "COM2");
+    modbusDevice->setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::NoParity);
+    modbusDevice->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud19200);
+    modbusDevice->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
+    modbusDevice->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, QSerialPort::OneStop);
+    modbusDevice->setServerAddress(1);
+
+    modbusDevice->connectDevice();
 
     return app.exec();
 }
+
+
