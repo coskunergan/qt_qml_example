@@ -10,8 +10,14 @@
 #include <QQmlProperty>
 #include <QTimer>
 #include <QModbusServer>
-#include <QModbusRtuSerialSlave>
+//#include <QModbusRtuSerialSlave>
+#if QT_CONFIG(modbus_serialport)
+#    include <QModbusRtuSerialServer>
+#    include <QSerialPortInfo>
+#endif
 #include <QSerialPort>
+#include <QModbusTcpServer>
+#include <QUrl>
 
 int select_pan = 0;
 quint16 dial1_x;
@@ -31,6 +37,14 @@ quint16 dial4_state;
 quint16 dial5_state;
 QModbusServer *modbusDevice = nullptr;
 
+enum ModbusConnection
+{
+    Serial,
+    Tcp
+};
+
+ModbusConnection type = Tcp;
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -44,7 +58,7 @@ int main(int argc, char *argv[])
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.show();
 
-    QQuickItem *root = view.rootObject()->findChild<QQuickItem *>("Root");
+    //QQuickItem *root = view.rootObject()->findChild<QQuickItem *>("Root");
     QQuickItem *item1 = view.rootObject()->findChild<QQuickItem *>("Dial1");
     QQuickItem *item2 = view.rootObject()->findChild<QQuickItem *>("Dial2");
     QQuickItem *item3 = view.rootObject()->findChild<QQuickItem *>("Dial3");
@@ -156,7 +170,7 @@ int main(int argc, char *argv[])
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(27), view.rootObject()->property("dial3_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(28), view.rootObject()->property("dial4_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(29), view.rootObject()->property("dial5_value").toInt());
-
+        dial1_state = 1; // test
         item1->setVisible(dial1_state);
         item2->setVisible(dial2_state);
         item3->setVisible(dial3_state);
@@ -178,7 +192,24 @@ int main(int argc, char *argv[])
     PanClass PanE(5);
     QObject::connect(item5, SIGNAL(sendMessage(QString)), &PanE, SLOT(msgSlot(QString)));
 
-    modbusDevice = new QModbusRtuSerialSlave();
+    if(type == Serial)
+    {
+        modbusDevice = new QModbusRtuSerialServer();
+        modbusDevice->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "COM2");
+        modbusDevice->setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::NoParity);
+        modbusDevice->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud19200);
+        modbusDevice->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
+        modbusDevice->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, QSerialPort::OneStop);
+    }
+    else if(type == Tcp)
+    {
+        modbusDevice = new QModbusTcpServer();
+
+        const QUrl url = QUrl::fromUserInput(QLatin1String("127.0.0.1:21"));
+        modbusDevice->setConnectionParameter(QModbusDevice::NetworkPortParameter, url.port());
+        modbusDevice->setConnectionParameter(QModbusDevice::NetworkAddressParameter, url.host());
+    }
+
 
     QModbusDataUnitMap reg;
     //reg.insert(QModbusDataUnit::Coils, { QModbusDataUnit::Coils, 0, 10 });
@@ -188,32 +219,7 @@ int main(int argc, char *argv[])
 
     modbusDevice->setMap(reg);
 
-    /*connect(modbusDevice, &QModbusServer::dataWritten,
-            this, &MainWindow::updateWidgets);
-    connect(modbusDevice, &QModbusServer::stateChanged,
-            this, &MainWindow::onStateChanged);
-    connect(modbusDevice, &QModbusServer::errorOccurred,
-            this, &MainWindow::handleDeviceError);
-
-    connect(ui->listenOnlyBox, &QCheckBox::toggled, this, [this](bool toggled) {
-        if (modbusDevice)
-            modbusDevice->setValue(QModbusServer::ListenOnlyMode, toggled);
-    });
-    emit ui->listenOnlyBox->toggled(ui->listenOnlyBox->isChecked());
-    connect(ui->setBusyBox, &QCheckBox::toggled, this, [this](bool toggled) {
-        if (modbusDevice)
-            modbusDevice->setValue(QModbusServer::DeviceBusy, toggled ? 0xffff : 0x0000);
-    });
-    emit ui->setBusyBox->toggled(ui->setBusyBox->isChecked());
-    */
-
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialPortNameParameter, "COM2");
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialParityParameter, QSerialPort::NoParity);
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, QSerialPort::Baud19200);
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, QSerialPort::Data8);
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, QSerialPort::OneStop);
     modbusDevice->setServerAddress(1);
-
     modbusDevice->connectDevice();
 
     return app.exec();
