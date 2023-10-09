@@ -48,22 +48,46 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
 Item {
     id: root
     property real value : 0
+    property real valuex : 0
+    property real valuey : 0
     width: 210; height: 210
     scale: clickMouse.pressed ? 0.98 : 1.0
-
+    x: valuex
+    y: valuey
+    Behavior on x {
+       NumberAnimation {
+                    duration: 2000
+                    easing.type: Easing.InOutQuad;
+                    easing.amplitude: 1.1;
+                    easing.period: 1.5
+        }
+    }
+    Behavior on y {
+       NumberAnimation {
+                    duration: 1500
+                    easing.type: Easing.InOutQuad;
+                    easing.amplitude: 1.1;
+                    easing.period: 1.5
+        }
+    }
     Image {
-        source: "background.png"        
+        source: "background.png"
         MouseArea {
             id: clickMouse
             anchors.fill: parent
             anchors.margins: 10
-            onClicked: root.sendMessage("click pan")
+            onClicked:{
+                if(lock_state == false && pause_state == false)
+                {
+                    root.sendMessage("click pan")
+                }
+            }
         }
     }
 

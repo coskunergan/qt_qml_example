@@ -14,7 +14,13 @@ void PanClass::msgSlot(const QString &str)
 {
     qDebug() << " PAN: " << m_pan << " ";
 
-    select_pan = m_pan;
-
+    if(select_pan == m_pan)
+    {
+        select_pan = 0;
+    }
+    else
+    {
+        select_pan = m_pan;
+    }
     qDebug() << str;
 }

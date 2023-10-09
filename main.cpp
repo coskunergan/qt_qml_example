@@ -37,6 +37,8 @@ quint16 dial4_state;
 quint16 dial5_state;
 QModbusServer *modbusDevice = nullptr;
 
+#define SLIDER_TIMEOUT 30 // ~3sn
+
 enum ModbusConnection
 {
     Serial,
@@ -56,9 +58,8 @@ int main(int argc, char *argv[])
     view.connect(view.engine(), &QQmlEngine::quit, &app, &QCoreApplication::quit);
     view.setSource(QUrl("qrc:/dialcontrol.qml"));
     view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.show();
+    view.showFullScreen();
 
-    //QQuickItem *root = view.rootObject()->findChild<QQuickItem *>("Root");
     QQuickItem *item1 = view.rootObject()->findChild<QQuickItem *>("Dial1");
     QQuickItem *item2 = view.rootObject()->findChild<QQuickItem *>("Dial2");
     QQuickItem *item3 = view.rootObject()->findChild<QQuickItem *>("Dial3");
@@ -71,6 +72,7 @@ int main(int argc, char *argv[])
     QObject::connect(&timer, &QTimer::timeout, [&]()
     {
         static int m_select_pan = 1;
+        static int m_slider = 0;
         if(timeout_count)
         {
             if(--timeout_count == 0)
@@ -78,9 +80,14 @@ int main(int argc, char *argv[])
                 select_pan = 0;
             }
         }
+        if(m_slider != view.rootObject()->property("slider_value").toInt())
+        {
+            m_slider = view.rootObject()->property("slider_value").toInt();
+            timeout_count = SLIDER_TIMEOUT;
+        }
         if(select_pan != m_select_pan)
         {
-            timeout_count = 30; // ~3sn
+            timeout_count = SLIDER_TIMEOUT;
             view.rootObject()->setProperty("slider_update", select_pan);
             view.rootObject()->setProperty("update_slider", 123);
             switch(select_pan)
@@ -140,37 +147,37 @@ int main(int argc, char *argv[])
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(0), 1); // Config Bits
 
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(1), &dial1_x);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(2), &dial1_y);
-        item1->setWidth(640 - (dial1_x * 850) / 100);
-        item1->setHeight(480 - (dial1_y * 480) / 100);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(2), &dial1_y);        
+        view.rootObject()->setProperty("dial1_valuex", dial1_x * 55 / 10 + 100);
+        view.rootObject()->setProperty("dial1_valuey", dial1_y * 28 / 10);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(3), &dial1_state);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(4), &dial2_x);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(5), &dial2_y);
-        item2->setWidth(640 - (dial2_x * 850) / 100);
-        item2->setHeight(480 - (dial2_y * 480) / 100);
+        view.rootObject()->setProperty("dial2_valuex", dial2_x * 55 / 10 + 100);
+        view.rootObject()->setProperty("dial2_valuey", dial2_y * 28 / 10);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(6), &dial2_state);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(7), &dial3_x);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(8), &dial3_y);
-        item3->setWidth(640 - (dial3_x * 850) / 100);
-        item3->setHeight(480 - (dial3_y * 480) / 100);
+        view.rootObject()->setProperty("dial3_valuex", dial3_x * 55 / 10 + 100);
+        view.rootObject()->setProperty("dial3_valuey", dial3_y * 28 / 10);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(9), &dial3_state);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(10), &dial4_x);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(11), &dial4_y);
-        item4->setWidth(640 - (dial4_x * 850) / 100);
-        item4->setHeight(480 - (dial4_y * 480) / 100);
+        view.rootObject()->setProperty("dial4_valuex", dial4_x * 55 / 10 + 100);
+        view.rootObject()->setProperty("dial4_valuey", dial4_y * 28 / 10);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(12), &dial4_state);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(13), &dial5_x);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(14), &dial5_y);
-        item5->setWidth(640 - (dial5_x * 850) / 100);
-        item5->setHeight(480 - (dial5_y * 480) / 100);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(15), &dial5_state);
+        view.rootObject()->setProperty("dial5_valuex", dial5_x * 55 / 10 + 100);
+        view.rootObject()->setProperty("dial5_valuey", dial5_y * 28 / 10);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(15), &dial5_state);        
 
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(25), view.rootObject()->property("dial1_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(26), view.rootObject()->property("dial2_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(27), view.rootObject()->property("dial3_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(28), view.rootObject()->property("dial4_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(29), view.rootObject()->property("dial5_value").toInt());
-        dial1_state = 1; // test
+
         item1->setVisible(dial1_state);
         item2->setVisible(dial2_state);
         item3->setVisible(dial3_state);
@@ -205,7 +212,7 @@ int main(int argc, char *argv[])
     {
         modbusDevice = new QModbusTcpServer();
 
-        const QUrl url = QUrl::fromUserInput(QLatin1String("127.0.0.1:21"));
+        const QUrl url = QUrl::fromUserInput(QLatin1String("192.168.4.2:50200"));
         modbusDevice->setConnectionParameter(QModbusDevice::NetworkPortParameter, url.port());
         modbusDevice->setConnectionParameter(QModbusDevice::NetworkAddressParameter, url.host());
     }

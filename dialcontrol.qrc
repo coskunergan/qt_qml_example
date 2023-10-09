@@ -4,9 +4,16 @@
         <file>content/background.png</file>
         <file>content/Dial.qml</file>
         <file>content/needle_shadow.png</file>
-        <file>content/needle.png</file>
+        <file>content/needle.png</file>		
         <file>content/overlay.png</file>
         <file>content/quit.png</file>
+		<file>content/power.png</file>
+		<file>content/pause.png</file>
+		<file>content/lock.png</file>
+		<file>content/unlock.png</file>
         <file>content/QuitButton.qml</file>
+		<file>content/LockButton.qml</file>
+		<file>content/PowerButton.qml</file>
+		<file>content/PauseButton.qml</file>
     </qresource>
 </RCC>
