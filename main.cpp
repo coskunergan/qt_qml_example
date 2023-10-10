@@ -88,8 +88,6 @@ int main(int argc, char *argv[])
         if(select_pan != m_select_pan)
         {
             timeout_count = SLIDER_TIMEOUT;
-            view.rootObject()->setProperty("slider_update", select_pan);
-            view.rootObject()->setProperty("update_slider", 123);
             switch(select_pan)
             {
                 case 1:
@@ -115,11 +113,11 @@ int main(int argc, char *argv[])
             m_select_pan = select_pan;
             if(select_pan)
             {
-                slider->setVisible(dial1_state | dial2_state | dial3_state | dial4_state | dial5_state);
+                view.rootObject()->setProperty("slider_visib",dial1_state | dial2_state | dial3_state | dial4_state | dial5_state);
             }
             else
             {
-                slider->setVisible(false);
+                view.rootObject()->setProperty("slider_visib",false);
             }
         }
         switch(select_pan)

@@ -56,10 +56,63 @@ Item {
     property real value : 0
     property real valuex : 0
     property real valuey : 0
+    property bool selected: false
     width: 210; height: 210
     scale: clickMouse.pressed ? 0.98 : 1.0
     x: valuex
     y: valuey
+    state: selected ? "Visible" : "Invisible"
+
+    states: [
+        State{
+            name: "Visible"
+            PropertyChanges{target: root; opacity: 1.0}
+            PropertyChanges{target: root; visible: true}
+        },
+        State{
+            name:"Invisible"
+            PropertyChanges{target: root; opacity: 0.2}
+            PropertyChanges{target: root; visible: true}
+        }
+    ]
+    transitions: [
+        Transition {
+            from: "Visible"
+            to: "Invisible"
+
+            SequentialAnimation{
+                NumberAnimation {
+                    target: root
+                    property: "opacity"
+                    duration: 500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: root
+                    property: "visible"
+                    duration: 0
+                }
+            }
+        },
+
+        Transition {
+            from: "Invisible"
+            to: "Visible"
+            SequentialAnimation{
+                NumberAnimation {
+                    target: root
+                    property: "visible"
+                    duration: 0
+                }
+                NumberAnimation {
+                    target: root
+                    property: "opacity"
+                    duration: 500
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+    ]
     Behavior on x {
        NumberAnimation {
                     duration: 2000

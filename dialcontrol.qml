@@ -68,6 +68,7 @@ Rectangle {
     //visibility:  "FullScreen"
     //value: slider.x * 100 / (container.width - 32)
     property int isUpdate: 0
+    property bool slider_visib: false
     property int slider_value: slider.x * 100 / (container.width - 32)
     property real dial1_value : 0
     property real dial1_valuex : 0
@@ -104,6 +105,8 @@ Rectangle {
         objectName: "Dial1"
         id: dial1
         visible: false
+        //opacity: (isUpdate == 1 || isUpdate == 0) ? 1 : 0.5
+        selected: (isUpdate == 1 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial1_value
         valuex : dial1_valuex
@@ -114,6 +117,8 @@ Rectangle {
         objectName: "Dial2"
         id: dial2
         visible: false
+        //opacity: (isUpdate == 2 || isUpdate == 0) ? 1 : 0.5
+        selected: (isUpdate == 2 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial2_value
         valuex : dial2_valuex
@@ -123,6 +128,8 @@ Rectangle {
         objectName: "Dial3"
         id: dial3
         visible: false
+        //opacity: (isUpdate == 3 || isUpdate == 0) ? 1 : 0.5
+        selected: (isUpdate == 3 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial3_value
         valuex : dial3_valuex
@@ -132,6 +139,7 @@ Rectangle {
         objectName: "Dial4"
         id: dial4
         visible: false
+        selected: (isUpdate == 4 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial4_value
         valuex : dial4_valuex
@@ -141,12 +149,42 @@ Rectangle {
         objectName: "Dial5"
         id: dial5
         visible: false
+        //opacity: (isUpdate == 5 || isUpdate == 0) ? 1 : 0.5
+        selected: (isUpdate == 5 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial5_value
         valuex : dial5_valuex
         valuey : dial5_valuey
     }
-
+    PowerButton {
+        objectName: "PowerButton"
+        id: power
+        opacity : 1 - container.opacity
+        anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter;
+            bottomMargin: 10;
+        }
+        width: 120; height: 120
+    }
+    PauseButton {
+        objectName: "PauseButton"
+        id: pause
+        opacity : 1 - container.opacity
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 40
+        anchors.left: power.right
+        anchors.leftMargin: 10
+        width: 64; height: 64
+    }
+    LockButton {
+        objectName: "LockButton"
+        id: lock
+        opacity : 1 - container.opacity
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 38
+        anchors.right: power.left
+        anchors.rightMargin: 10
+        width: 64; height: 64
+    }
     Rectangle {
         id: container
         visible: false
@@ -165,6 +203,60 @@ Rectangle {
             GradientStop { position: 1.0; color: "white" }
         }
 
+        // --------------animation visible start --------------
+
+        state: slider_visib ? "Visible" : "Invisible"
+
+        states: [
+            State{
+                name: "Visible"
+                PropertyChanges{target: container; opacity: 1.0}
+                PropertyChanges{target: container; visible: true}
+            },
+            State{
+                name:"Invisible"
+                PropertyChanges{target: container; opacity: 0.0}
+                PropertyChanges{target: container; visible: false}
+            }
+        ]
+        transitions: [
+            Transition {
+                from: "Visible"
+                to: "Invisible"
+                SequentialAnimation{
+                    NumberAnimation {
+                        target: container
+                        property: "opacity"
+                        duration: 500
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation {
+                        target: container
+                        property: "visible"
+                        duration: 0
+                    }
+                }
+            },
+
+            Transition {
+                from: "Invisible"
+                to: "Visible"
+                SequentialAnimation{
+                    NumberAnimation {
+                        target: container
+                        property: "visible"
+                        duration: 0
+                    }
+                    NumberAnimation {
+                        target: container
+                        property: "opacity"
+                        duration: 500
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
+        ]
+        //---------- animation visible end -----------
        onWidthChanged: {
             if (oldWidth === 0) {
                 oldWidth = width;
@@ -232,35 +324,6 @@ Rectangle {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 30
-    }
-    PowerButton {
-        objectName: "PowerButton"
-        id: power
-        visible: !slider.visible
-        anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter;
-            bottomMargin: 10;
-        }
-        width: 120; height: 120
-    }
-    PauseButton {
-        objectName: "PauseButton"
-        id: pause
-        visible: !slider.visible
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 40
-        anchors.left: power.right
-        anchors.leftMargin: 10
-        width: 64; height: 64
-    }
-    LockButton {
-        objectName: "LockButton"
-        id: lock
-        visible: !slider.visible
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 38
-        anchors.right: power.left
-        anchors.rightMargin: 10
-        width: 64; height: 64
     }
 }
 //! [0]
