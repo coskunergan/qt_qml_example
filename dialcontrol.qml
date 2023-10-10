@@ -92,10 +92,18 @@ Rectangle {
     property bool pause_state : false
     property bool lock_state : false
     property bool power_state : false
+    Label {
+        text: qsTr("  V1.0")
+        visible: false
+        font.pointSize: 6
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 2
+    }
 
     Dial {
         objectName: "Dial1"
         id: dial1
+        visible: false
         signal sendMessage(string msg)
         value : dial1_value
         valuex : dial1_valuex
@@ -105,6 +113,7 @@ Rectangle {
     Dial {
         objectName: "Dial2"
         id: dial2
+        visible: false
         signal sendMessage(string msg)
         value : dial2_value
         valuex : dial2_valuex
@@ -113,6 +122,7 @@ Rectangle {
     Dial {
         objectName: "Dial3"
         id: dial3
+        visible: false
         signal sendMessage(string msg)
         value : dial3_value
         valuex : dial3_valuex
@@ -121,6 +131,7 @@ Rectangle {
     Dial {
         objectName: "Dial4"
         id: dial4
+        visible: false
         signal sendMessage(string msg)
         value : dial4_value
         valuex : dial4_valuex
@@ -129,6 +140,7 @@ Rectangle {
     Dial {
         objectName: "Dial5"
         id: dial5
+        visible: false
         signal sendMessage(string msg)
         value : dial5_value
         valuex : dial5_valuex
@@ -137,6 +149,7 @@ Rectangle {
 
     Rectangle {
         id: container
+        visible: false
         objectName: "Slider"
         property int oldWidth: 0
         anchors { bottom: parent.bottom; left: parent.left
@@ -166,18 +179,44 @@ Rectangle {
             id: slider
             objectName: "FullFlexSlider"
             x: 1; y: 1; width: 30; height: 38
-            radius: 6
+            radius: 12
             antialiasing: true
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "#424242" }
                 GradientStop { position: 1.0; color: "red" }
             }
-
-            MouseArea {
+            /*MouseArea {
                 anchors.fill: parent
                 anchors.margins: -16 // Increase mouse area a lot outside the slider
                 drag.target: parent; drag.axis: Drag.XAxis
-                drag.minimumX: 2; drag.maximumX: container.width - 32
+                drag.minimumX: 0; drag.maximumX: container.width - 32
+            }*/
+        }
+        MultiPointTouchArea{
+            anchors.fill: container
+            touchPoints: [
+                TouchPoint {
+                    id: point1
+                    onPressedChanged: function(){
+                    if(pressed)
+                        {
+                            //console.log("pressed");
+                            //console.log(touchslider.testStringReturn());
+                            //touchslider.sliderSetValueFromTouch(slider, );
+                            if(point1.x < container.width - 32 && point1.x > 0)
+                            {
+                                slider.x = point1.x;
+                            }
+                        }
+                    }
+                }
+            ]
+            onTouchUpdated: function(){
+                //touchslider.sliderSetValueFromTouch(slider, point1.x);
+                if(point1.x <= container.width - 32 && point1.x > 0)
+                {
+                    slider.x = point1.x;
+                }
             }
         }
     }    
