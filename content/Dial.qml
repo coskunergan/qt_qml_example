@@ -50,10 +50,13 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Shapes
+import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
     property real value : 0
+    property int level: root.value
     property real valuex : 0
     property real valuey : 0
     property bool selected: false
@@ -131,6 +134,31 @@ Item {
     }
     Image {
         source: "background.png"
+
+            RadialGradient {
+                anchors.fill: parent
+                gradient: Gradient {
+                    GradientStop { position: 0.45 - root.value / 50 ; color: "#00000000" }
+                    GradientStop { position: 0.49 ; color: (level == 0) ? "#00000000": Qt.rgba(0.5, 0.25 - (root.value / 40) , 0, 1) }
+                    GradientStop { position: 0.5; color: "#00000000" }
+                }
+            }
+            Label {
+                x: 90
+                y: 70
+                text:(level == 10) ? "B" : (level).toFixed(0)
+                font.family: "Helvetica"
+                font.bold: true
+                font.pointSize: 55
+            }
+            /*DropShadow {
+                    anchors.fill: rect
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    radius: 8.0
+                    color: "#80000000"
+                    source: rect
+                }*/
         MouseArea {
             id: clickMouse
             anchors.fill: parent
@@ -143,44 +171,4 @@ Item {
             }
         }
     }
-
-//! [needle_shadow]
-    Image {
-        x: 86
-        y: 35
-        width: 19
-        height: 72
-        source: "needle_shadow.png"
-        rotation: -0.264
-        transform: Rotation {
-            origin.x: 19; origin.y: 67
-            angle: needleRotation.angle
-        }
-    }
-//! [needle_shadow]
-//! [needle]
-    Image {
-        id: needle
-        x: 98; y: 33
-        antialiasing: true
-        source: "needle.png"
-        scale: clickMouse.pressed ? 0.55 : 1.0
-        transform: Rotation {
-            id: needleRotation
-            origin.x: 5; origin.y: 65
-            //! [needle angle]
-            angle: Math.min(Math.max(-130, root.value*2.6 - 130), 133)
-            Behavior on angle {
-                SpringAnimation {
-                    spring: 1.4
-                    damping: .15
-                }
-            }
-            //! [needle angle]
-        }
-    }
-//! [needle]
-//! [overlay]
-    Image { x: 21; y: 18; source: "overlay.png" }
-//! [overlay]
 }

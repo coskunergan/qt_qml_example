@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(27), view.rootObject()->property("dial3_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(28), view.rootObject()->property("dial4_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(29), view.rootObject()->property("dial5_value").toInt());
-
+        dial1_state=true; // test
         item1->setVisible(dial1_state);
         item2->setVisible(dial2_state);
         item3->setVisible(dial3_state);

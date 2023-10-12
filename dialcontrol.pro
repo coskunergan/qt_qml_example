@@ -7,6 +7,7 @@ TEMPLATE = app
 TARGET = dialcontrol
 
 QT += quick qml
+QT += gui
 CONFIG += c++11
 
 SOURCES += main.cpp \

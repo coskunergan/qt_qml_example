@@ -69,7 +69,7 @@ Rectangle {
     //value: slider.x * 100 / (container.width - 32)
     property int isUpdate: 0
     property bool slider_visib: false
-    property int slider_value: slider.x * 100 / (container.width - 32)
+    property int slider_value: slider.x * 11 / (container.width - 32)
     property real dial1_value : 0
     property real dial1_valuex : 0
     property real dial1_valuey : 0
@@ -94,8 +94,8 @@ Rectangle {
     property bool lock_state : false
     property bool power_state : false
     Label {
-        text: qsTr("  V1.0")
-        visible: false
+        text: qsTr("  GTM Europe V1.0")
+        visible: true
         font.pointSize: 6
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 2
@@ -161,18 +161,18 @@ Rectangle {
         id: power
         opacity : 1 - container.opacity
         anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter;
-            bottomMargin: 10;
+            bottomMargin: 38;
         }
-        width: 120; height: 120
+        width: 64; height: 64
     }
     PauseButton {
         objectName: "PauseButton"
         id: pause
         opacity : 1 - container.opacity
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 40
+        anchors.bottomMargin: 38
         anchors.left: power.right
-        anchors.leftMargin: 10
+        anchors.leftMargin: 30
         width: 64; height: 64
     }
     LockButton {
@@ -182,7 +182,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 38
         anchors.right: power.left
-        anchors.rightMargin: 10
+        anchors.rightMargin: 30
         width: 64; height: 64
     }
     Rectangle {
@@ -192,15 +192,124 @@ Rectangle {
         property int oldWidth: 0
         anchors { bottom: parent.bottom; left: parent.left
             right: parent.right; leftMargin: 20; rightMargin: 20
-            bottomMargin: 30
+            bottomMargin: 40
         }
-        height: 40
+        height: 60
         radius: 8
         opacity: 0.7
         antialiasing: true
         gradient: Gradient {
             GradientStop { position: 0.0; color: "gray" }
-            GradientStop { position: 1.0; color: "white" }
+            GradientStop { position: 1.0; color: "darkgray" }
+        }
+        Label {
+            id:label_0
+            x:45
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 0) ? "black" : "dimgray"
+            text: qsTr("0")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_1
+            anchors.left: label_0.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 1) ? "black" : "dimgray"
+            text: qsTr("1")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_2
+            anchors.left: label_1.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 2) ? "black" : "dimgray"
+            text: qsTr("2")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_3
+            anchors.left: label_2.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 3) ? "black" : "dimgray"
+            text: qsTr("3")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_4
+            anchors.left: label_3.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 4) ? "black" : "dimgray"
+            text: qsTr("4")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_5
+            anchors.left: label_4.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 5) ? "black" : "dimgray"
+            text: qsTr("5")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_6
+            anchors.left: label_5.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 6) ? "black" : "dimgray"
+            text: qsTr("6")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_7
+            anchors.left: label_6.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 7) ? "black" : "dimgray"
+            text: qsTr("7")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_8
+            anchors.left: label_7.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 8) ? "black" : "dimgray"
+            text: qsTr("8")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_9
+            anchors.left: label_8.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 9) ? "black" : "dimgray"
+            text: qsTr("9")
+            font.pointSize: 45
+        }
+        Label {
+            id:label_B
+            anchors.left: label_9.right
+            anchors.leftMargin: 55
+            font.family: "Helvetica"
+            font.bold: true
+            color: (slider_value == 10) ? "black" : "dimgray"
+            text: qsTr("B")
+            font.pointSize: 45
         }
 
         // --------------animation visible start --------------
@@ -269,20 +378,7 @@ Rectangle {
         }
         Rectangle {
             id: slider
-            objectName: "FullFlexSlider"
-            x: 1; y: 1; width: 30; height: 38
-            radius: 12
-            antialiasing: true
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "#424242" }
-                GradientStop { position: 1.0; color: "red" }
-            }
-            /*MouseArea {
-                anchors.fill: parent
-                anchors.margins: -16 // Increase mouse area a lot outside the slider
-                drag.target: parent; drag.axis: Drag.XAxis
-                drag.minimumX: 0; drag.maximumX: container.width - 32
-            }*/
+            visible : false
         }
         MultiPointTouchArea{
             anchors.fill: container
@@ -315,7 +411,7 @@ Rectangle {
     Connections {
         target: targetItem
         onIsUpdateChanged: {
-           slider.x = slider_value * (container.width - 32) / 100
+           slider.x = slider_value * (container.width - 32) / 11
         }
     } 
     QuitButton {
