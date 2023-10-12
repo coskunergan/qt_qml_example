@@ -113,11 +113,11 @@ int main(int argc, char *argv[])
             m_select_pan = select_pan;
             if(select_pan)
             {
-                view.rootObject()->setProperty("slider_visib",dial1_state | dial2_state | dial3_state | dial4_state | dial5_state);
+                view.rootObject()->setProperty("slider_visib", dial1_state | dial2_state | dial3_state | dial4_state | dial5_state);
             }
             else
             {
-                view.rootObject()->setProperty("slider_visib",false);
+                view.rootObject()->setProperty("slider_visib", false);
             }
         }
         switch(select_pan)
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(0), 1); // Config Bits
 
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(1), &dial1_x);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(2), &dial1_y);        
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(2), &dial1_y);
         view.rootObject()->setProperty("dial1_valuex", dial1_x * 55 / 10 + 100);
         view.rootObject()->setProperty("dial1_valuey", dial1_y * 28 / 10);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(3), &dial1_state);
@@ -168,19 +168,19 @@ int main(int argc, char *argv[])
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(14), &dial5_y);
         view.rootObject()->setProperty("dial5_valuex", dial5_x * 55 / 10 + 100);
         view.rootObject()->setProperty("dial5_valuey", dial5_y * 28 / 10);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(15), &dial5_state);        
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(15), &dial5_state);
 
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(25), view.rootObject()->property("dial1_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(26), view.rootObject()->property("dial2_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(27), view.rootObject()->property("dial3_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(28), view.rootObject()->property("dial4_value").toInt());
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(29), view.rootObject()->property("dial5_value").toInt());
-        dial1_state=true; // test
-        item1->setVisible(dial1_state);
-        item2->setVisible(dial2_state);
-        item3->setVisible(dial3_state);
-        item4->setVisible(dial4_state);
-        item5->setVisible(dial5_state);
+        //dial1_state = true; // test
+        view.rootObject()->setProperty("dial1_state", dial1_state);
+        view.rootObject()->setProperty("dial2_state", dial2_state);
+        view.rootObject()->setProperty("dial3_state", dial3_state);
+        view.rootObject()->setProperty("dial4_state", dial4_state);
+        view.rootObject()->setProperty("dial5_state", dial5_state);
     }
                     );
 

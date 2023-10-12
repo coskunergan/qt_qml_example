@@ -70,18 +70,23 @@ Rectangle {
     property int isUpdate: 0
     property bool slider_visib: false
     property int slider_value: slider.x * 11 / (container.width - 32)
+    property int dial1_state : 0
     property real dial1_value : 0
     property real dial1_valuex : 0
     property real dial1_valuey : 0
+    property int dial2_state : 0
     property real dial2_value : 0
     property real dial2_valuex : 0
     property real dial2_valuey : 0
+    property int dial3_state : 0
     property real dial3_value : 0
     property real dial3_valuex : 0
     property real dial3_valuey : 0
+    property int dial4_state : 0
     property real dial4_value : 0
     property real dial4_valuex : 0
     property real dial4_valuey : 0
+    property int dial5_state : 0
     property real dial5_value : 0
     property real dial5_valuex : 0
     property real dial5_valuey : 0
@@ -111,6 +116,7 @@ Rectangle {
         value : dial1_value
         valuex : dial1_valuex
         valuey : dial1_valuey
+        dial_state: dial1_state
     }
 
     Dial {
@@ -123,6 +129,7 @@ Rectangle {
         value : dial2_value
         valuex : dial2_valuex
         valuey : dial2_valuey
+        dial_state: dial2_state
     }
     Dial {
         objectName: "Dial3"
@@ -134,6 +141,7 @@ Rectangle {
         value : dial3_value
         valuex : dial3_valuex
         valuey : dial3_valuey
+        dial_state: dial3_state
     }
     Dial {
         objectName: "Dial4"
@@ -144,6 +152,7 @@ Rectangle {
         value : dial4_value
         valuex : dial4_valuex
         valuey : dial4_valuey
+        dial_state: dial4_state
     }
     Dial {
         objectName: "Dial5"
@@ -155,7 +164,8 @@ Rectangle {
         value : dial5_value
         valuex : dial5_valuex
         valuey : dial5_valuey
-    }
+        dial_state: dial5_state
+    }    
     PowerButton {
         objectName: "PowerButton"
         id: power

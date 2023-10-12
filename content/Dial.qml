@@ -55,6 +55,7 @@ import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
+    property int dial_state : 0
     property real value : 0
     property int level: root.value
     property real valuex : 0
@@ -64,7 +65,62 @@ Item {
     scale: clickMouse.pressed ? 0.98 : 1.0
     x: valuex
     y: valuey
-    state: selected ? "Visible" : "Invisible"
+
+    // --------------animation first visible start --------------
+
+    /*state: dial_state ? "Visible_First" : "Invisible_First"
+
+    states: [
+        State{
+            name: "Visible_First"
+            PropertyChanges{target: root; opacity: 1.0}
+            PropertyChanges{target: root; visible: true}
+        },
+        State{
+            name:"Invisible_First"
+            PropertyChanges{target: root; opacity: 0.0}
+            PropertyChanges{target: root; visible: false}
+        }
+    ]
+    transitions: [
+        Transition {
+            from: "Visible_First"
+            to: "Invisible_First"
+            SequentialAnimation{
+                NumberAnimation {
+                    target: root
+                    property: "opacity"
+                    duration: 500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: root
+                    property: "visible"
+                    duration: 0
+                }
+            }
+        },
+
+        Transition {
+            from: "Invisible_First"
+            to: "Visible_First"
+            SequentialAnimation{
+                NumberAnimation {
+                    target: root
+                    property: "visible"
+                    duration: 0
+                }
+                NumberAnimation {
+                    target: root
+                    property: "opacity"
+                    duration: 500
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+    ]*/
+    //---------- animation first visible end -----------
+    state: (dial_state == 0) ? "Invisible" : selected ? "Visible" : "HalfInvisible"
 
     states: [
         State{
@@ -73,15 +129,20 @@ Item {
             PropertyChanges{target: root; visible: true}
         },
         State{
-            name:"Invisible"
+            name:"HalfInvisible"
             PropertyChanges{target: root; opacity: 0.2}
-            PropertyChanges{target: root; visible: true}
+            PropertyChanges{target: root; visible: true}        
+        },
+        State{
+            name:"Invisible"
+            PropertyChanges{target: root; opacity: 0}
+            PropertyChanges{target: root; visible: false}
         }
     ]
     transitions: [
         Transition {
             from: "Visible"
-            to: "Invisible"
+            to: "HalfInvisible"
 
             SequentialAnimation{
                 NumberAnimation {
@@ -94,6 +155,24 @@ Item {
                     target: root
                     property: "visible"
                     duration: 0
+                }
+            }
+        },
+
+        Transition {
+            from: "HalfInvisible"
+            to: "Visible"
+            SequentialAnimation{
+                NumberAnimation {
+                    target: root
+                    property: "visible"
+                    duration: 0
+                }
+                NumberAnimation {
+                    target: root
+                    property: "opacity"
+                    duration: 500
+                    easing.type: Easing.InOutQuad
                 }
             }
         },
@@ -110,12 +189,31 @@ Item {
                 NumberAnimation {
                     target: root
                     property: "opacity"
-                    duration: 500
+                    duration: 1000
                     easing.type: Easing.InOutQuad
+                }
+            }
+        },
+        Transition {
+            from: "Visible"
+            to: "Invisible"
+
+            SequentialAnimation{
+                NumberAnimation {
+                    target: root
+                    property: "opacity"
+                    duration: 1000
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: root
+                    property: "visible"
+                    duration: 0
                 }
             }
         }
     ]
+    //----------------------------
     Behavior on x {
        NumberAnimation {
                     duration: 2000
