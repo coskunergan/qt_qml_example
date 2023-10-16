@@ -438,7 +438,7 @@ Rectangle {
         onIsUpdateChanged: {
            slider.x = slider_value * (container.width - 32) / 11
         }
-    } 
+    }
     QuitButton {
         objectName: "QuitButton"
         id: quit

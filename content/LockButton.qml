@@ -1,34 +1,44 @@
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
-    Image {
-        source: (lock_state == true) ? "lock.png" : "unlock.png";
+    Flipable {
+        id: flipable
+        width: 64
+        height: 64
+        property bool flipped: false
         scale: lockMouse.pressed ? 0.9 : 1.0
-        SequentialAnimation {
-               id: anim
-               PropertyAnimation {
-                   target: root
-                   property: "opacity"
-                   to: 0.2
-                   duration: 1000
-                   easing.type: Easing.OutQuart
-               }
-               PropertyAnimation {
-                   target: root
-                   property: "opacity"
-                   to: 1
-                   duration: 1000
-                   easing.type: Easing.InOutCubic
-               }
-           }
-        Timer {
-            id: fadeTimer
-            interval: 3000;
-            repeat: true
-            onTriggered: { anim.running = lock_state }
+        front: Image { source: "unlock.png"; anchors.centerIn: parent }
+        back: Image { source: "unlock.png"; anchors.centerIn: parent }
+
+        transform: Rotation {
+            id: rotation
+            origin.x: flipable.width/2
+            origin.y: flipable.height/2
+            axis.x: 0; axis.y: 1; axis.z: 0     // set axis.y to 1 to rotate around y-axis
+            angle: 0    // the default angle
         }
+
+        states: State {
+            name: "back"
+            PropertyChanges { target: rotation; angle: 180 }
+            when: flipable.flipped
+        }
+
+        transitions: Transition {
+            NumberAnimation { target: rotation; property: "angle"; duration: 500 }
+        }
+        Timer {
+            id: flipTimer
+            interval: 1000;
+            repeat: true
+            onTriggered: { flipable.flipped = (lock_state) ? !flipable.flipped : false}
+        }
+        onVisibleChanged: {
+            flipable.flipped = !flipable.flipped;
+        }
+
         MouseArea {
             id: lockMouse
             anchors.fill: parent
@@ -45,8 +55,11 @@ Item {
             }
             onMyPressAndHold: {
                 lock_state=!lock_state
-                fadeTimer.start();
-                anim.running = lock_state
+                if(lock_state)
+                flipTimer.start();
+                else
+                flipTimer.stop();
+
             }
 
             Timer {

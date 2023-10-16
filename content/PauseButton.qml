@@ -1,11 +1,37 @@
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
-    Image {
-        source: (pause_state) ? "play.png" : "pause.png"
+    Flipable {
+        id: flipable
+        width: 64
+        height: 64
+        property bool flipped: false
         scale: pauseMouse.pressed ? 0.9 : 1.0
+        front: Image { source: "pause.png"; anchors.centerIn: parent }
+        back: Image { source: "play.png"; anchors.centerIn: parent }
+
+        transform: Rotation {
+            id: rotation
+            origin.x: flipable.width/2
+            origin.y: flipable.height/2
+            axis.x: 0; axis.y: 1; axis.z: 0     // set axis.y to 1 to rotate around y-axis
+            angle: 0    // the default angle
+        }
+
+        states: State {
+            name: "back"
+            PropertyChanges { target: rotation; angle: 180 }
+            when: flipable.flipped
+        }
+
+        transitions: Transition {
+            NumberAnimation { target: rotation; property: "angle"; duration: 500 }
+        }
+        onVisibleChanged: {
+            flipable.flipped = !flipable.flipped;
+        }
         MouseArea {
             id: pauseMouse
             anchors.fill: parent
@@ -18,6 +44,7 @@ Item {
                             if(dial1_value || dial2_value || dial3_value|| dial4_value|| dial5_value)
                             {
                                 pause_state = true;
+                                flipable.flipped = (pause_state) ? !flipable.flipped : false;
                                 backup_dial1_value = dial1_value;
                                 backup_dial2_value = dial2_value;
                                 backup_dial3_value = dial3_value;
@@ -33,6 +60,7 @@ Item {
                         else
                         {
                             pause_state = false;
+                            flipable.flipped = (pause_state) ? !flipable.flipped : false;
                             dial1_value = backup_dial1_value;
                             dial2_value = backup_dial2_value;
                             dial3_value = backup_dial3_value;
