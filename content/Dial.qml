@@ -60,9 +60,12 @@ Item {
     property int level: root.value
     property real valuex : 0
     property real valuey : 0
+    property bool active: false
+    property bool p_state: false
     property bool selected: false
     width: 210; height: 210
     scale: clickMouse.pressed ? 0.98 : 1.0
+    antialiasing: true
     x: valuex
     y: valuey
 
@@ -120,7 +123,7 @@ Item {
         }
     ]*/
     //---------- animation first visible end -----------
-    state: (dial_state == 0) ? "Invisible" : selected ? "Visible" : "HalfInvisible"
+    state: (dial_state == 0 || power_state == false) ? "Invisible" : active ? "Visible" : "HalfInvisible"
 
     states: [
         State{
@@ -230,9 +233,27 @@ Item {
                     easing.period: 1.5
         }
     }
+    Rectangle{
+        id : select_circle
+        visible: selected
+        width: 215
+        height: 215
+        radius:180
+        color: "antiquewhite"
+        }
+    Rectangle{        
+        visible : select_circle.visible
+        width:  213
+        height: 213
+        radius: 180
+        x:1
+        y:1        
+        color: "#141414"
+        }
     Image {
-        source: "background.png"
-
+        source: "background.png"        
+        x:3
+        y:3
             RadialGradient {
                 anchors.fill: parent
                 gradient: Gradient {
@@ -248,6 +269,7 @@ Item {
                 font.family: "Helvetica"
                 font.bold: true
                 font.pointSize: 55
+                color : "antiquewhite"
             }
             /*DropShadow {
                     anchors.fill: rect

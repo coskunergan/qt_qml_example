@@ -63,8 +63,7 @@ Rectangle {
     id: root
     visible: true
     width: 640
-    height: 480
-    color: "#545454"    
+    height: 480    
     //visibility:  "FullScreen"
     //value: slider.x * 100 / (container.width - 32)
     property int isUpdate: 0
@@ -98,6 +97,8 @@ Rectangle {
     property bool pause_state : false
     property bool lock_state : false
     property bool power_state : false
+    property bool drv_power_state : false
+    color: (power_state) ? "#141414" : "#000000"
     Label {
         text: qsTr("  GTM Europe V1.0")
         visible: true
@@ -105,70 +106,82 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 2
     }
-
+    Logo {
+        objectName: "Logo"
+        id: logo
+        anchors.centerIn: parent
+        active: !power_state
+    }
     Dial {
         objectName: "Dial1"
         id: dial1
         visible: false
-        //opacity: (isUpdate == 1 || isUpdate == 0) ? 1 : 0.5
-        selected: (isUpdate == 1 || isUpdate == 0) ? true : false
+        selected: (isUpdate == 1) ? true : false
+        active: (isUpdate == 1 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial1_value
         valuex : dial1_valuex
         valuey : dial1_valuey
         dial_state: dial1_state
+        p_state: power_state
     }
 
     Dial {
         objectName: "Dial2"
         id: dial2
         visible: false
-        //opacity: (isUpdate == 2 || isUpdate == 0) ? 1 : 0.5
-        selected: (isUpdate == 2 || isUpdate == 0) ? true : false
+        selected: (isUpdate == 2) ? true : false
+        active: (isUpdate == 2 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial2_value
         valuex : dial2_valuex
         valuey : dial2_valuey
         dial_state: dial2_state
+        p_state: power_state
     }
     Dial {
         objectName: "Dial3"
         id: dial3
         visible: false
-        //opacity: (isUpdate == 3 || isUpdate == 0) ? 1 : 0.5
-        selected: (isUpdate == 3 || isUpdate == 0) ? true : false
+        selected: (isUpdate == 3) ? true : false
+        active: (isUpdate == 3 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial3_value
         valuex : dial3_valuex
         valuey : dial3_valuey
         dial_state: dial3_state
+        p_state: power_state
     }
     Dial {
         objectName: "Dial4"
         id: dial4
         visible: false
-        selected: (isUpdate == 4 || isUpdate == 0) ? true : false
+        selected: (isUpdate == 4) ? true : false
+        active: (isUpdate == 4 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial4_value
         valuex : dial4_valuex
         valuey : dial4_valuey
         dial_state: dial4_state
+        p_state: power_state
     }
     Dial {
         objectName: "Dial5"
         id: dial5
         visible: false
-        //opacity: (isUpdate == 5 || isUpdate == 0) ? 1 : 0.5
-        selected: (isUpdate == 5 || isUpdate == 0) ? true : false
+        selected: (isUpdate == 5) ? true : false
+        active: (isUpdate == 5 || isUpdate == 0) ? true : false
         signal sendMessage(string msg)
         value : dial5_value
         valuex : dial5_valuex
         valuey : dial5_valuey
         dial_state: dial5_state
+        p_state: power_state
     }    
     PowerButton {
         objectName: "PowerButton"
         id: power
+        visible: drv_power_state
         opacity : 1 - container.opacity
         anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter;
             bottomMargin: 38;
@@ -178,6 +191,7 @@ Rectangle {
     PauseButton {
         objectName: "PauseButton"
         id: pause
+        visible : (power_state) ? true : false
         opacity : 1 - container.opacity
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 38
@@ -188,6 +202,7 @@ Rectangle {
     LockButton {
         objectName: "LockButton"
         id: lock
+        visible : (power_state) ? true : false
         opacity : 1 - container.opacity
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 38
@@ -204,20 +219,20 @@ Rectangle {
             right: parent.right; leftMargin: 20; rightMargin: 20
             bottomMargin: 40
         }
-        height: 60
+        height: 52
         radius: 8
         opacity: 0.7
         antialiasing: true
         gradient: Gradient {
             GradientStop { position: 0.0; color: "gray" }
-            GradientStop { position: 1.0; color: "darkgray" }
+            GradientStop { position: 0.2; color: "#141414" }
         }
         Label {
             id:label_0
             x:45
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 0) ? "black" : "dimgray"
+            color: (slider_value == 0) ? "antiquewhite" : "dimgray"
             text: qsTr("0")
             font.pointSize: 45
         }
@@ -227,7 +242,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 1) ? "black" : "dimgray"
+            color: (slider_value == 1) ? "antiquewhite" : "dimgray"
             text: qsTr("1")
             font.pointSize: 45
         }
@@ -237,7 +252,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 2) ? "black" : "dimgray"
+            color: (slider_value == 2) ? "antiquewhite" : "dimgray"
             text: qsTr("2")
             font.pointSize: 45
         }
@@ -247,7 +262,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 3) ? "black" : "dimgray"
+            color: (slider_value == 3) ? "antiquewhite" : "dimgray"
             text: qsTr("3")
             font.pointSize: 45
         }
@@ -257,7 +272,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 4) ? "black" : "dimgray"
+            color: (slider_value == 4) ? "antiquewhite" : "dimgray"
             text: qsTr("4")
             font.pointSize: 45
         }
@@ -267,7 +282,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 5) ? "black" : "dimgray"
+            color: (slider_value == 5) ? "antiquewhite" : "dimgray"
             text: qsTr("5")
             font.pointSize: 45
         }
@@ -277,7 +292,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 6) ? "black" : "dimgray"
+            color: (slider_value == 6) ? "antiquewhite" : "dimgray"
             text: qsTr("6")
             font.pointSize: 45
         }
@@ -287,7 +302,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 7) ? "black" : "dimgray"
+            color: (slider_value == 7) ? "antiquewhite" : "dimgray"
             text: qsTr("7")
             font.pointSize: 45
         }
@@ -297,7 +312,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 8) ? "black" : "dimgray"
+            color: (slider_value == 8) ? "antiquewhite" : "dimgray"
             text: qsTr("8")
             font.pointSize: 45
         }
@@ -307,7 +322,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 9) ? "black" : "dimgray"
+            color: (slider_value == 9) ? "antiquewhite" : "dimgray"
             text: qsTr("9")
             font.pointSize: 45
         }
@@ -317,7 +332,7 @@ Rectangle {
             anchors.leftMargin: 55
             font.family: "Helvetica"
             font.bold: true
-            color: (slider_value == 10) ? "black" : "dimgray"
+            color: (slider_value == 10) ? "antiquewhite" : "dimgray"
             text: qsTr("B")
             font.pointSize: 45
         }
@@ -428,8 +443,9 @@ Rectangle {
         objectName: "QuitButton"
         id: quit
         anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.margins: 30
+        anchors.top: parent.top        
+        anchors.topMargin: 20
+        anchors.rightMargin: 38
     }
 }
 //! [0]

@@ -7,8 +7,10 @@
 		<file>content/power.png</file>
 		<file>content/pause.png</file>
 		<file>content/play.png</file>
-		<file>content/lock.png</file>
+		<file>content/lock.png</file>		
 		<file>content/unlock.png</file>
+		<file>content/logo.png</file>
+		<file>content/Logo.qml</file>
         <file>content/QuitButton.qml</file>
 		<file>content/LockButton.qml</file>
 		<file>content/PowerButton.qml</file>

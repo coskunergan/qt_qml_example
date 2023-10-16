@@ -4,7 +4,7 @@ requires(qtConfig(combobox))
 qtConfig(modbus-serialport): QT += serialport
 
 TEMPLATE = app
-TARGET = dialcontrol
+TARGET = GTM_Control
 
 QT += quick qml
 QT += gui
