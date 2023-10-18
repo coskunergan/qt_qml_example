@@ -3,11 +3,23 @@ import QtQuick
 
 Item {
     id: root
+    property int timer_count: 0
+    CircularProgressBar{
+        x: -8
+        y: -8
+        textColor: "#55aaff"
+        strokeBgWidth: 2
+        opacity: 0.5
+        //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        textShowValue: true
+        value: root.timer_count * 2.5
+    }
+
     Flipable {
         id: flipable
         width: 64
         height: 64
-        property bool flipped: false
+        property bool flipped: false        
         scale: lockMouse.pressed ? 0.9 : 1.0
         front: Image { source: "unlock.png"; anchors.centerIn: parent }
         back: Image { source: "unlock.png"; anchors.centerIn: parent }
@@ -44,13 +56,15 @@ Item {
             anchors.fill: parent
             anchors.margins: -10
 
-            property int pressAndHoldDuration: 2000
+            property int pressAndHoldDuration: 40
             signal myPressAndHold()
 
             onPressed: {
+                root.timer_count = 0;
                 pressAndHoldTimer.start();
             }
             onReleased: {
+                root.timer_count = 0;
                 pressAndHoldTimer.stop();
             }
             onMyPressAndHold: {
@@ -64,11 +78,15 @@ Item {
 
             Timer {
                 id:  pressAndHoldTimer
-                interval: parent.pressAndHoldDuration
+                interval: 50
                 running: false
-                repeat: false
-                onTriggered: {
-                    parent.myPressAndHold();
+                repeat: true
+                onTriggered: {                    
+                    if(++root.timer_count > parent.pressAndHoldDuration)
+                    {
+                        parent.myPressAndHold();
+                        pressAndHoldTimer.stop();
+                    }
                 }
             }
         }

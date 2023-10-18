@@ -192,6 +192,11 @@ int main(int argc, char *argv[])
                 dial4_state = 0;
                 dial5_state = 0;
                 select_pan = 0;
+                view.rootObject()->setProperty("dial1_value", 0);
+                view.rootObject()->setProperty("dial2_value", 0);
+                view.rootObject()->setProperty("dial3_value", 0);
+                view.rootObject()->setProperty("dial4_value", 0);
+                view.rootObject()->setProperty("dial5_value", 0);
             }
         }
         view.rootObject()->setProperty("dial1_state", dial1_state);
