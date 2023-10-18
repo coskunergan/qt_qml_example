@@ -53,7 +53,7 @@ Item {
         layer.enabled: true
         layer.samples: progress.samples
         layer.effect: progress.enableDropShadow ? internal.dropShadow : null
-
+        antialiasing: true
         /*ShapePath{
             id: pathBG
             strokeColor: progress.bgStrokeColor

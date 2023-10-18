@@ -37,6 +37,11 @@ quint16 dial2_state;
 quint16 dial3_state;
 quint16 dial4_state;
 quint16 dial5_state;
+quint16 m_dial1_state;
+quint16 m_dial2_state;
+quint16 m_dial3_state;
+quint16 m_dial4_state;
+quint16 m_dial5_state;
 QModbusServer *modbusDevice = nullptr;
 
 #define SLIDER_TIMEOUT 30 // ~3sn
@@ -67,7 +72,6 @@ int main(int argc, char *argv[])
     QQuickItem *item3 = view.rootObject()->findChild<QQuickItem *>("Dial3");
     QQuickItem *item4 = view.rootObject()->findChild<QQuickItem *>("Dial4");
     QQuickItem *item5 = view.rootObject()->findChild<QQuickItem *>("Dial5");
-    QQuickItem *slider = view.rootObject()->findChild<QQuickItem *>("Slider");
 
     int timeout_count = 0;
     QTimer timer;
@@ -204,6 +208,37 @@ int main(int argc, char *argv[])
         view.rootObject()->setProperty("dial3_state", dial3_state);
         view.rootObject()->setProperty("dial4_state", dial4_state);
         view.rootObject()->setProperty("dial5_state", dial5_state);
+
+        select_pan = (m_dial1_state != dial1_state && dial1_state) ? 1 : select_pan;
+        select_pan = (m_dial2_state != dial2_state && dial2_state) ? 2 : select_pan;
+        select_pan = (m_dial3_state != dial3_state && dial3_state) ? 3 : select_pan;
+        select_pan = (m_dial4_state != dial4_state && dial4_state) ? 4 : select_pan;
+        select_pan = (m_dial5_state != dial5_state && dial5_state) ? 5 : select_pan;
+        m_dial1_state = dial1_state;
+        m_dial2_state = dial2_state;
+        m_dial3_state = dial3_state;
+        m_dial4_state = dial4_state;
+        m_dial5_state = dial5_state;
+        if(item1->isVisible() == false)
+        {
+            view.rootObject()->setProperty("dial1_value", 0);
+        }
+        if(item2->isVisible() == false)
+        {
+            view.rootObject()->setProperty("dial2_value", 0);
+        }
+        if(item3->isVisible() == false)
+        {
+            view.rootObject()->setProperty("dial3_value", 0);
+        }
+        if(item4->isVisible() == false)
+        {
+            view.rootObject()->setProperty("dial4_value", 0);
+        }
+        if(item5->isVisible() == false)
+        {
+            view.rootObject()->setProperty("dial5_value", 0);
+        }
     }
                     );
 

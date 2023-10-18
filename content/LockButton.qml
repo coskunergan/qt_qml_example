@@ -12,7 +12,7 @@ Item {
         opacity: 0.5
         //Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         textShowValue: true
-        value: root.timer_count * 2.5
+        value: root.timer_count * 3.3
     }
 
     Flipable {
@@ -56,7 +56,7 @@ Item {
             anchors.fill: parent
             anchors.margins: -10
 
-            property int pressAndHoldDuration: 40
+            property int pressAndHoldDuration: 30
             signal myPressAndHold()
 
             onPressed: {

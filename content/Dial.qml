@@ -257,8 +257,8 @@ Item {
             RadialGradient {
                 anchors.fill: parent
                 gradient: Gradient {
-                    GradientStop { position: 0.45 - root.value / 50 ; color: "#00000000" }
-                    GradientStop { position: 0.49 ; color: (level == 0) ? "#00000000": Qt.rgba(0.5, 0.25 - (root.value / 40) , 0, 1) }
+                    GradientStop { position: 0.45 - root.value / 50 ; color: "#00000000" }                    
+                    GradientStop { position: 0.49 ; color: (level == 0) ? "#00000000": Qt.rgba(root.value / 20, 0 , 0.25 - (root.value / 40), 1) }
                     GradientStop { position: 0.5; color: "#00000000" }
                 }
             }

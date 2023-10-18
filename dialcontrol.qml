@@ -339,7 +339,7 @@ Rectangle {
 
         // --------------animation visible start --------------
 
-        state: slider_visib ? "Visible" : "Invisible"
+        state: (slider_visib && !lock_state && !pause_state && power_state) ? "Visible" : "Invisible"
 
         states: [
             State{
