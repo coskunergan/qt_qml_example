@@ -148,39 +148,39 @@ int main(int argc, char *argv[])
 
         }
         //----------- MODBUS --------------
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(1), &dial1_x);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(2), &dial1_y);
-        view.rootObject()->setProperty("dial1_valuex", dial1_x * 55 / 10 + 100);
-        view.rootObject()->setProperty("dial1_valuey", dial1_y * 28 / 10 + 10);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(3), &dial1_state);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(4), &dial2_x);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(5), &dial2_y);
-        view.rootObject()->setProperty("dial2_valuex", dial2_x * 55 / 10 + 100);
-        view.rootObject()->setProperty("dial2_valuey", dial2_y * 28 / 10 + 10);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(6), &dial2_state);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(7), &dial3_x);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(8), &dial3_y);
-        view.rootObject()->setProperty("dial3_valuex", dial3_x * 55 / 10 + 100);
-        view.rootObject()->setProperty("dial3_valuey", dial3_y * 28 / 10 + 10);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(9), &dial3_state);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(10), &dial4_x);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(11), &dial4_y);
-        view.rootObject()->setProperty("dial4_valuex", dial4_x * 55 / 10 + 100);
-        view.rootObject()->setProperty("dial4_valuey", dial4_y * 28 / 10 + 10);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(12), &dial4_state);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(13), &dial5_x);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(14), &dial5_y);
-        view.rootObject()->setProperty("dial5_valuex", dial5_x * 55 / 10 + 100);
-        view.rootObject()->setProperty("dial5_valuey", dial5_y * 28 / 10 + 10);
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(15), &dial5_state);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(11), &dial1_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(12), &dial1_y);
+        view.rootObject()->setProperty("dial1_valuex", dial1_x * 2862 / 1000 + 10);
+        view.rootObject()->setProperty("dial1_valuey", dial1_y * 1058 / 1000 + 10);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(13), &dial1_state);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(14), &dial2_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(15), &dial2_y);
+        view.rootObject()->setProperty("dial2_valuex", dial2_x * 2862 / 1000 + 10);
+        view.rootObject()->setProperty("dial2_valuey", dial2_y * 1058 / 1000 + 10);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(16), &dial2_state);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(17), &dial3_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(18), &dial3_y);
+        view.rootObject()->setProperty("dial3_valuex", dial3_x * 2862 / 1000 + 10);
+        view.rootObject()->setProperty("dial3_valuey", dial3_y * 1058 / 1000 + 10);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(19), &dial3_state);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(20), &dial4_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(21), &dial4_y);
+        view.rootObject()->setProperty("dial4_valuex", dial4_x * 2862 / 1000 + 10);
+        view.rootObject()->setProperty("dial4_valuey", dial4_y * 1058 / 1000 + 10);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(22), &dial4_state);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(23), &dial5_x);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(24), &dial5_y);
+        view.rootObject()->setProperty("dial5_valuex", dial5_x * 2862 / 1000 + 10);
+        view.rootObject()->setProperty("dial5_valuey", dial5_y * 1058 / 1000 + 10);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(25), &dial5_state);
 
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(25), view.rootObject()->property("dial1_value").toInt());
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(26), view.rootObject()->property("dial2_value").toInt());
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(27), view.rootObject()->property("dial3_value").toInt());
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(28), view.rootObject()->property("dial4_value").toInt());
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(29), view.rootObject()->property("dial5_value").toInt());
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(45), view.rootObject()->property("dial1_value").toInt()* 2);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(46), view.rootObject()->property("dial2_value").toInt()* 2);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(47), view.rootObject()->property("dial3_value").toInt()* 2);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(48), view.rootObject()->property("dial4_value").toInt()* 2);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(49), view.rootObject()->property("dial5_value").toInt()* 2);
         //dial1_state = true; // test
-        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(0), &config_bits);
+        modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(10), &config_bits);
         {
             if(config_bits & 0x1)
             {
@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
     QModbusDataUnitMap reg;
     //reg.insert(QModbusDataUnit::Coils, { QModbusDataUnit::Coils, 0, 10 });
     //reg.insert(QModbusDataUnit::DiscreteInputs, { QModbusDataUnit::DiscreteInputs, 0, 10 });
-    reg.insert(QModbusDataUnit::HoldingRegisters, { QModbusDataUnit::HoldingRegisters, 0, 33 });
+    reg.insert(QModbusDataUnit::HoldingRegisters, { QModbusDataUnit::HoldingRegisters, 0, 53 });
     //reg.insert(QModbusDataUnit::InputRegisters, { QModbusDataUnit::InputRegisters, 0, 10 });
 
     modbusDevice->setMap(reg);

@@ -20,7 +20,7 @@ void PanClass::msgSlot(const QString &str)
     }
     else
     {
-        select_pan = m_pan;
+        select_pan = m_pan;        
     }
     qDebug() << str;
 }
