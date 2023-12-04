@@ -101,6 +101,7 @@ Rectangle {
     color: (power_state) ? "#141414" : "#000000"
     Label {
         text: qsTr("  GTM Europe V1.0")
+        color: "#FFFFFF"
         visible: true
         font.pointSize: 6
         anchors.bottom: parent.bottom

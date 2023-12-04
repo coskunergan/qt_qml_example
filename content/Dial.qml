@@ -219,7 +219,7 @@ Item {
     //----------------------------
     Behavior on x {
        NumberAnimation {
-                    duration: 2000
+                    duration: (dial_state == 0) ? 0 : 2000
                     easing.type: Easing.InOutQuad;
                     easing.amplitude: 1.1;
                     easing.period: 1.5
@@ -227,7 +227,7 @@ Item {
     }
     Behavior on y {
        NumberAnimation {
-                    duration: 1500
+                    duration: (dial_state == 0) ? 0 : 1500
                     easing.type: Easing.InOutQuad;
                     easing.amplitude: 1.1;
                     easing.period: 1.5
