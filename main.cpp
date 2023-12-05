@@ -174,11 +174,11 @@ int main(int argc, char *argv[])
         view.rootObject()->setProperty("dial5_valuey", dial5_y * 1058 / 1000 + 10);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(25), &dial5_state);
 
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(45), view.rootObject()->property("dial1_value").toInt()* 2);
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(46), view.rootObject()->property("dial2_value").toInt()* 2);
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(47), view.rootObject()->property("dial3_value").toInt()* 2);
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(48), view.rootObject()->property("dial4_value").toInt()* 2);
-        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(49), view.rootObject()->property("dial5_value").toInt()* 2);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(45), view.rootObject()->property("dial1_value").toInt() * 2);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(46), view.rootObject()->property("dial2_value").toInt() * 2);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(47), view.rootObject()->property("dial3_value").toInt() * 2);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(48), view.rootObject()->property("dial4_value").toInt() * 2);
+        modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(49), view.rootObject()->property("dial5_value").toInt() * 2);
         //dial1_state = true; // test
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(10), &config_bits);
         {
@@ -209,16 +209,16 @@ int main(int argc, char *argv[])
         view.rootObject()->setProperty("dial4_state", dial4_state);
         view.rootObject()->setProperty("dial5_state", dial5_state);
 
-        select_pan = (m_dial1_state != dial1_state && dial1_state) ? 1 : select_pan;
-        select_pan = (m_dial2_state != dial2_state && dial2_state) ? 2 : select_pan;
-        select_pan = (m_dial3_state != dial3_state && dial3_state) ? 3 : select_pan;
-        select_pan = (m_dial4_state != dial4_state && dial4_state) ? 4 : select_pan;
-        select_pan = (m_dial5_state != dial5_state && dial5_state) ? 5 : select_pan;
-        m_dial1_state = dial1_state;
-        m_dial2_state = dial2_state;
-        m_dial3_state = dial3_state;
-        m_dial4_state = dial4_state;
-        m_dial5_state = dial5_state;
+        select_pan = (m_dial1_state != (dial1_state & 1) && (dial1_state & 1)) ? 1 : select_pan;
+        select_pan = (m_dial2_state != (dial2_state & 1) && (dial2_state & 1)) ? 2 : select_pan;
+        select_pan = (m_dial3_state != (dial3_state & 1) && (dial3_state & 1)) ? 3 : select_pan;
+        select_pan = (m_dial4_state != (dial4_state & 1) && (dial4_state & 1)) ? 4 : select_pan;
+        select_pan = (m_dial5_state != (dial5_state & 1) && (dial5_state & 1)) ? 5 : select_pan;
+        m_dial1_state = dial1_state & 1;
+        m_dial2_state = dial2_state & 1;
+        m_dial3_state = dial3_state & 1;
+        m_dial4_state = dial4_state & 1;
+        m_dial5_state = dial5_state & 1;
         if(item1->isVisible() == false)
         {
             view.rootObject()->setProperty("dial1_value", 0);
