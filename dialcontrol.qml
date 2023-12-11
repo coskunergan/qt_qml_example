@@ -66,6 +66,7 @@ Rectangle {
     height: 480    
     //visibility:  "FullScreen"
     //value: slider.x * 100 / (container.width - 32)
+    property string infoStr: ""
     property int isUpdate: 0
     property bool slider_visib: false
     property int slider_value: slider.x * 11 / (container.width - 32)
@@ -112,6 +113,19 @@ Rectangle {
         id: logo
         anchors.centerIn: parent
         active: !power_state
+    }
+    Label {
+        objectName: "info_str"
+        id: info_str
+        text: qsTr(infoStr)
+        color: "#FFFFFF"
+        visible: true
+        font.pointSize: 26
+        anchors {
+            bottom: parent.bottom;
+            horizontalCenter: parent.horizontalCenter;
+            bottomMargin: 120;
+        }
     }
     Dial {
         objectName: "Dial1"

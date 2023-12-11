@@ -181,28 +181,28 @@ int main(int argc, char *argv[])
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(49), view.rootObject()->property("dial5_value").toInt() * 2);
         //dial1_state = true; // test
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(10), &config_bits);
+
+        if(config_bits & 0x1)
         {
-            if(config_bits & 0x1)
-            {
-                view.rootObject()->setProperty("drv_power_state", true);
-            }
-            else
-            {
-                view.rootObject()->setProperty("drv_power_state", false);
-                view.rootObject()->setProperty("power_state", false);
-                dial1_state = 0;
-                dial2_state = 0;
-                dial3_state = 0;
-                dial4_state = 0;
-                dial5_state = 0;
-                select_pan = 0;
-                view.rootObject()->setProperty("dial1_value", 0);
-                view.rootObject()->setProperty("dial2_value", 0);
-                view.rootObject()->setProperty("dial3_value", 0);
-                view.rootObject()->setProperty("dial4_value", 0);
-                view.rootObject()->setProperty("dial5_value", 0);
-            }
+            view.rootObject()->setProperty("drv_power_state", true);
         }
+        else
+        {
+            view.rootObject()->setProperty("drv_power_state", false);
+            view.rootObject()->setProperty("power_state", false);
+            dial1_state = 0;
+            dial2_state = 0;
+            dial3_state = 0;
+            dial4_state = 0;
+            dial5_state = 0;
+            select_pan = 0;
+            view.rootObject()->setProperty("dial1_value", 0);
+            view.rootObject()->setProperty("dial2_value", 0);
+            view.rootObject()->setProperty("dial3_value", 0);
+            view.rootObject()->setProperty("dial4_value", 0);
+            view.rootObject()->setProperty("dial5_value", 0);
+        }
+
         view.rootObject()->setProperty("dial1_state", dial1_state);
         view.rootObject()->setProperty("dial2_state", dial2_state);
         view.rootObject()->setProperty("dial3_state", dial3_state);
@@ -283,7 +283,32 @@ int main(int argc, char *argv[])
     modbusDevice->setMap(reg);
 
     modbusDevice->setServerAddress(1);
-    modbusDevice->connectDevice();
+
+    QTimer timer_mb;
+    QObject::connect(&timer_mb, &QTimer::timeout, [&]()
+    {
+        modbusDevice->disconnectDevice();
+        bool res = modbusDevice->connectDevice();
+        if(modbusDevice->state() != QModbusDevice::ConnectedState)
+        {
+            if(res)
+            {
+                view.rootObject()->setProperty("infoStr", "Connect Success..");
+            }
+            else
+            {
+                config_bits = 0;
+                modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(10), 0);
+                view.rootObject()->setProperty("infoStr", "Waiting for connection...");
+            }
+        }
+        else
+        {
+            view.rootObject()->setProperty("infoStr", "");
+        }
+    }
+                    );
+    timer_mb.start(1000);
 
     return app.exec();
 }
