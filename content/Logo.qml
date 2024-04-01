@@ -56,7 +56,7 @@ import Qt5Compat.GraphicalEffects
 Item {
     id: root
     property bool active: false    
-    width: 790; height: 326
+    width: 1597; height: 233
     scale: 0.5
 
     state: (active) ? "Visible" : "Invisible";
