@@ -64,7 +64,7 @@ Item {
     property bool p_state: false
     property bool selected: false
     width: 210; height: 210
-    scale: clickMouse.pressed ? 0.98 : 1.0
+    scale: clickMouse.pressed ? ((dial_state & 0x10) ? 0.98 : 0.60) : ((dial_state & 0x10) ? 1.0 : 0.68)
     antialiasing: true
     x: valuex
     y: valuey
@@ -205,7 +205,7 @@ Item {
                 NumberAnimation {
                     target: root
                     property: "opacity"
-                    duration: 1000
+                    duration: 20
                     easing.type: Easing.InOutQuad
                 }
                 NumberAnimation {
@@ -265,7 +265,7 @@ Item {
             Label {
                 x: 90
                 y: 70
-                text:(level == 10) ? "B" : (level).toFixed(0)
+                text:(level == 10) ? "P" : (level).toFixed(0)
                 font.family: "Helvetica"
                 font.bold: true
                 font.pointSize: 55

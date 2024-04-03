@@ -348,7 +348,7 @@ Rectangle {
             font.family: "Helvetica"
             font.bold: true
             color: (slider_value == 10) ? "antiquewhite" : "dimgray"
-            text: qsTr("B")
+            text: qsTr("P")
             font.pointSize: 45
         }
 
