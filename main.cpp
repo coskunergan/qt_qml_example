@@ -157,8 +157,6 @@ int main(int argc, char *argv[])
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(13), &dial1_state);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(14), &dial2_x);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(15), &dial2_y);
-        //dial2_x = 1;//test
-        //dial2_y = 1;//test
         view.rootObject()->setProperty("dial2_valuex", ((dial2_x-1) * 63) * 2862 / 1000 + 10);
         view.rootObject()->setProperty("dial2_valuey", ((7-dial2_y) * 55) * 1058 / 1000 - 30);
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(16), &dial2_state);
@@ -183,8 +181,7 @@ int main(int argc, char *argv[])
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(47), view.rootObject()->property("dial3_value").toInt() * 2);
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(48), view.rootObject()->property("dial4_value").toInt() * 2);
         modbusDevice->setData(QModbusDataUnit::HoldingRegisters, quint16(49), view.rootObject()->property("dial5_value").toInt() * 2);
-        //dial1_state = true; // test
-        //dial2_state = true; // test
+        //dial1_state = 3; // test
         modbusDevice->data(QModbusDataUnit::HoldingRegisters, quint16(10), &config_bits);
 
         if(config_bits & 0x1)
@@ -298,7 +295,7 @@ int main(int argc, char *argv[])
         {
             if(res)
             {
-                view.rootObject()->setProperty("infoStr", "Connect Success..");
+               view.rootObject()->setProperty("infoStr", "Connect Success..");
             }
             else
             {

@@ -257,8 +257,8 @@ Item {
             RadialGradient {
                 anchors.fill: parent
                 gradient: Gradient {
-                    GradientStop { position: 0.45 - root.value / 50 ; color: "#00000000" }                    
-                    GradientStop { position: 0.49 ; color: (level == 0 || ((dial_state & 2) == 0) || ((dial_state & 1) == 0)) ? "#00000000": Qt.rgba(root.value / 20, 0 , 0.25 - (root.value / 40), 1) }
+                    GradientStop { position:  (level == 0) ? 0.3 : (0.45 - root.value / 50) ; color: "#00000000" }
+                    GradientStop { position: 0.49 ; color: ((dial_state & 1) == 0 || ((dial_state & 2) == 0)) ? "#00000000" : (level == 0) ? "#4169e1" : Qt.rgba(root.value / 20, 0 , 0.25 - (root.value / 40), 1) }
                     GradientStop { position: 0.5; color: "#00000000" }
                 }
             }
